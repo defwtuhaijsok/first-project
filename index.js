@@ -1,17 +1,14 @@
-function isIsomorphic(s, t) {
-  if (s.length !== t.length) return false;
-  const sMap = new Map();
-  const tMap = new Map();
-  for (let i = 0; i < s.length; i++) {
-    const sChar = s[i];
-    const tChar = t[i];
-    if (
-      (sMap.has(sChar) && sMap.get(sChar) !== tChar) ||
-      (tMap.has(tChar) && tMap.get(tChar) !== sChar)
-    )
-      return false;
-    sMap.set(sChar, tChar);
-    tMap.set(tChar, sChar);
+function maxArea(height) {
+  let maxArea = 0;
+  let left = 0;
+  let right = height.length - 1;
+  while (left < right) {
+    maxArea = Math.max(
+      maxArea,
+      Math.min(height[left], height[right]) * (right - left),
+    );
+    if (height[left] < height[right]) left++;
+    else right--;
   }
-  return true;
+  return maxArea;
 }
