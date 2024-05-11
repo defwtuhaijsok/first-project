@@ -1,21 +1,24 @@
-function addTwoNumbers(l1, l2) {
-  const dummy = new ListNode(0);
-  let p = l1,
-    q = l2,
-    curr = dummy;
-  let carry = 0;
-  while (p !== null || q !== null) {
-    const x = p !== null ? p.val : 0;
-    const y = q !== null ? q.val : 0;
-    const sum = x + y + carry;
-    carry = Math.floor(sum / 10);
-    curr.next = new ListNode(sum % 10);
-    curr = curr.next;
-    if (p !== null) p = p.next;
-    if (q !== null) q = q.next;
+function exist(board, word) {
+  const rows = board.length;
+  const cols = board[0].length;
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      if (dfs(board, i, j, word, 0)) return true;
+    }
   }
-  if (carry > 0) {
-    curr.next = new ListNode(carry);
+  return false;
+  function dfs(board, i, j, word, index) {
+    if (index === word.length) return true;
+    if (i < 0 || i >= rows || j < 0 || j >= cols || board[i][j] !== word[index])
+      return false;
+    const temp = board[i][j];
+    board[i][j] = "#";
+    const found =
+      dfs(board, i + 1, j, word, index + 1) ||
+      dfs(board, i - 1, j, word, index + 1) ||
+      dfs(board, i, j + 1, word, index + 1) ||
+      dfs(board, i, j - 1, word, index + 1);
+    board[i][j] = temp;
+    return found;
   }
-  return dummy.next;
 }
