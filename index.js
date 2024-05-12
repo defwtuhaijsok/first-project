@@ -1,24 +1,20 @@
-function exist(board, word) {
-  const rows = board.length;
-  const cols = board[0].length;
-  for (let i = 0; i < rows; i++) {
-    for (let j = 0; j < cols; j++) {
-      if (dfs(board, i, j, word, 0)) return true;
+function calculate(s) {
+  const stack = [];
+  let num = 0;
+  let sign = "+";
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    if (!isNaN(parseInt(char)) && char !== " ") {
+      num = num * 10 + parseInt(char);
+    }
+    if (isNaN(parseInt(char)) || i === s.length - 1) {
+      if (sign === "+") stack.push(num);
+      else if (sign === "-") stack.push(-num);
+      else if (sign === "*") stack.push(stack.pop() * num);
+      else if (sign === "/") stack.push(parseInt(stack.pop() / num));
+      num = 0;
+      sign = char;
     }
   }
-  return false;
-  function dfs(board, i, j, word, index) {
-    if (index === word.length) return true;
-    if (i < 0 || i >= rows || j < 0 || j >= cols || board[i][j] !== word[index])
-      return false;
-    const temp = board[i][j];
-    board[i][j] = "#";
-    const found =
-      dfs(board, i + 1, j, word, index + 1) ||
-      dfs(board, i - 1, j, word, index + 1) ||
-      dfs(board, i, j + 1, word, index + 1) ||
-      dfs(board, i, j - 1, word, index + 1);
-    board[i][j] = temp;
-    return found;
-  }
+  return stack.reduce((acc, val) => acc + val, 0);
 }
